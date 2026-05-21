@@ -111,7 +111,7 @@ module.exports = function(config) {
   // ─────────────────────────────────────────────────────────────────────────────
 
   config.set({
-    frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
+    frameworks: ['ui5', 'qunit'],
 
     ui5: {
       url: "https://sapui5.hana.ondemand.com",
@@ -123,8 +123,8 @@ module.exports = function(config) {
         }
       },
       tests: [
-        "ns/html5module/test/unit/AllTests",
-        "ns/html5module/test/integration/AllJourneys"
+        "ns.html5module.test.unit.AllTests",
+        "ns.html5module.test.integration.AllJourneys"
       ]
     },
 
@@ -202,10 +202,8 @@ module.exports = function(config) {
     plugins: [
       'karma-ui5',
       'karma-qunit',
-      'karma-mocha',
       'karma-chrome-launcher',
       'karma-junit-reporter',
-      'karma-browserify',
       'karma-coverage',
       'karma-webdriver-launcher',
       { 'reporter:sonarGeneric': ['type', SonarGenericReporter] }
