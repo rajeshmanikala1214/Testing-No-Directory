@@ -1,5 +1,5 @@
 sap.ui.define([
-    "ns/HTML5Module/test/integration/NavigationJourney"
+    "ns/html5module/test/integration/NavigationJourney"
 ], function() {
     "use strict";
 });

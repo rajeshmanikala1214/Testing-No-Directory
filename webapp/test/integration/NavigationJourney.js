@@ -1,8 +1,8 @@
 /*global QUnit*/
 sap.ui.define([
     "sap/ui/test/opaQunit",
-    "ns/HTML5Module/test/integration/pages/View1",
-    "ns/HTML5Module/test/integration/arrangements/Startup"
+    "ns/html5module/test/integration/pages/View1",
+    "ns/html5module/test/integration/arrangements/Startup"
 ], function(opaTest) {
     "use strict";
 

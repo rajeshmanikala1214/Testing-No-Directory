@@ -1,6 +1,6 @@
 /*global QUnit*/
 sap.ui.define([
-    "ns/HTML5Module/model/models"
+    "ns/html5module/model/models"
 ], function(models) {
     "use strict";
 

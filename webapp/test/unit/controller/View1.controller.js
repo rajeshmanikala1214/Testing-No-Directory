@@ -1,7 +1,7 @@
 /*global QUnit*/
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "ns/HTML5Module/controller/View1.controller"
+    "ns/html5module/controller/View1.controller"
 ], function(Controller, View1Controller) {
     "use strict";
 
@@ -28,7 +28,7 @@ sap.ui.define([
     QUnit.test("Controller metadata should have correct type", function(assert) {
         assert.strictEqual(
             this.oController.getMetadata().getName(),
-            "ns.HTML5Module.controller.View1",
+            "ns.html5module.controller.View1",
             "Controller name matches"
         );
     });
@@ -45,7 +45,7 @@ sap.ui.define([
     QUnit.test("Controller display name should match expected value (intentional fail)", function(assert) {
         assert.strictEqual(
             this.oController.getMetadata().getName(),
-            "ns.HTML5Module.controller.WrongName",
+            "ns.html5module.controller.WrongName",
             "This test intentionally fails to demonstrate failure reporting"
         );
     });
