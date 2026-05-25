@@ -10,106 +10,6 @@ module.exports = function(config) {
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
-  // ─── Inline SonarQube Generic Test Execution reporter ───────────────────────
-  // Writes reports/test-execution.xml in SonarQube Generic format.
-  // Does NOT crash on OPA5/QUnit tests unlike karma-sonarqube-unit-reporter.
-  function SonarGenericReporter(baseReporterDecorator) {
-  baseReporterDecorator(this);
-
-  const specResults = [];
-
-  this.onSpecComplete = function(browser, result) {
-    specResults.push({
-      suite:   (result.suite || []).join(' '),
-      name:    result.description || 'unnamed',
-      time:    result.time || 1,
-      success: result.success,
-      skipped: result.skipped,
-      log:     result.log || []
-    });
-  };
-
-  this.onRunComplete = function() {
-    var suiteMap = {};
-    specResults.forEach(function(r) {
-      var key = r.suite || 'General';
-      if (!suiteMap[key]) suiteMap[key] = [];
-      suiteMap[key].push(r);
-    });
-
-    // Enhanced XML escaper to clean up problematic characters inside attributes safely
-    function escapeXml(str) {
-      return String(str || '')
-        .replace(/&/g,  '&amp;')
-        .replace(/</g,  '&lt;')
-        .replace(/>/g,  '&gt;')
-        .replace(/"/g,  '&quot;')
-        .replace(/'/g,  '&apos;');
-    }
-
-    function suiteToFilePath(suite) {
-      var lc = suite.toLowerCase();
-      const base = 'webapp/test/';
-
-      if (lc.indexOf('navigation') !== -1 || lc.indexOf('journey') !== -1) {
-        return base + 'integration/NavigationJourney.js';
-      }
-      if (lc.indexOf('model') !== -1) {
-        return base + 'unit/model/models.js';
-      }
-      if (lc.indexOf('formatter') !== -1) {
-        return base + 'unit/util/formatter.js';
-      }
-      if (lc.indexOf('view1') !== -1 || lc.indexOf('controller') !== -1) {
-        return base + 'unit/controller/View1.controller.js';
-      }
-
-      return base + 'unit/' + suite.replace(/\s+/g, '_') + '.js';
-    }
-
-    var xml = '<testExecutions version="1">\n';
-
-    Object.keys(suiteMap).forEach(function(suite) {
-      var filePath = suiteToFilePath(suite);
-      xml += '  <file path="' + escapeXml(filePath) + '">\n';
-
-      suiteMap[suite].forEach(function(tc) {
-        var duration = Math.max(Math.round(tc.time), 1);
-        var name = escapeXml(tc.name);
-
-        if (tc.skipped) {
-          xml += '    <testCase name="' + name + '" duration="' + duration + '">\n';
-          xml += '      <skipped/>\n';
-          xml += '    </testCase>\n';
-        } else if (!tc.success) {
-          // Grab the raw log string and slice it safely 
-          var rawMsg = tc.log[0] || 'Test failed';
-          var cleanMsg = escapeXml(rawMsg.substring(0, 500));
-          
-          xml += '    <testCase name="' + name + '" duration="' + duration + '">\n';
-          xml += '      <failure message="' + cleanMsg + '"/>\n';
-          xml += '    </testCase>\n';
-        } else {
-          xml += '    <testCase name="' + name + '" duration="' + duration + '"/>\n';
-        }
-      });
-
-      xml += '  </file>\n';
-    });
-
-    xml += '</testExecutions>\n';
-
-    var reportsDir = path.join(__dirname, 'reports');
-    if (!fs.existsSync(reportsDir)) {
-      fs.mkdirSync(reportsDir, { recursive: true });
-    }
-    var outputPath = path.join(reportsDir, 'test-execution.xml');
-    fs.writeFileSync(outputPath, xml, 'utf8');
-    console.log('[SonarGeneric] Written: ' + outputPath);
-  };
-}
-  // ─────────────────────────────────────────────────────────────────────────────
-
   config.set({
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
@@ -137,8 +37,8 @@ module.exports = function(config) {
       'webapp/!(test)/**/*.js': ['coverage']
     },
 
-    // sonarqubeUnit intentionally EXCLUDED — it crashes with OPA5/QUnit
-    reporters: ['progress', 'coverage', 'junit', 'sonarGeneric'],
+    // Adjusted to remove 'sonarGeneric' reporter
+    reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
       dir: 'reports',
@@ -154,15 +54,6 @@ module.exports = function(config) {
       outputFile: 'TESTS-karma.xml',
       useBrowserName: false,
       suite: 'KarmaTests'
-    },
-
-    sonarQubeUnitReporter: {
-    sonarQubeVersion: 'LATEST',
-    outputFile: 'reports/test-execution.xml',
-    overrideTestDescription: true,
-    testPaths: ['webapp/test'],
-    testFilePattern: '.js',
-    useBrowserName: false
     },
     
     port: 9876,
@@ -207,8 +98,7 @@ module.exports = function(config) {
       'karma-junit-reporter',
       'karma-browserify',
       'karma-coverage',
-      'karma-webdriver-launcher',
-      { 'reporter:sonarGeneric': ['type', SonarGenericReporter] }
+      'karma-webdriver-launcher'
     ],
 
     concurrency: 1,
