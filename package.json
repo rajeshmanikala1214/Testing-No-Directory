@@ -8,18 +8,14 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
   "devDependencies": {
-    "@ui5/cli": "^4.0.33",
-    "@sap/ux-ui5-tooling": "1",
     "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
-    "eslint": "^10",
-    "ui5-task-zipper": "^3.4.x",
-    "rimraf": "^5.0.5",
-    "mbt": "^1.2.29",
     "@sap/ui5-builder-webide-extension": "1.0.x",
+    "@sap/ux-ui5-tooling": "1",
     "@sapui5/ts-types": "1.71.x",
+    "@ui5/cli": "^4.0.33",
     "bestzip": "2.1.4",
+    "eslint": "^10",
     "karma": "^4.4.1",
     "karma-browserify": "^8.1.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -29,8 +25,12 @@
     "karma-qunit": "^4.2.1",
     "karma-ui5": "^2.4.0",
     "karma-webdriver-launcher": "^1.0.8",
+    "mbt": "^1.2.29",
     "mocha": "^11.7.5",
-    "qunit": "^2.25.0"
+    "qunit": "^2.25.0",
+    "rimraf": "^5.0.5",
+    "ui5-task-zipper": "^3.4.x",
+    "ui5-test-runner": "^5.13.1"
   },
   "scripts": {
     "start": "fiori run --open \"test/flp.html#app-preview\"",
@@ -46,7 +46,8 @@
     "build:cf": "ui5 build preload --clean-dest --config ui5-deploy.yaml --include-task=generateCachebusterInfo",
     "build:mta": "rimraf resources mta_archives && mbt build",
     "undeploy": "cf undeploy nshtml5module --delete-services --delete-service-keys --delete-service-brokers",
-    "test": "karma start"
+    "test": "karma start",
+    "tests": "ui5-test-runner"
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }
