@@ -51,7 +51,7 @@ module.exports = function(config) {
 
     junitReporter: {
       outputDir: 'reports',
-      outputFile: 'TESTS-karma.xml',
+      outputFile: 'reports/TESTS-karma.xml',
       useBrowserName: false,
       suite: 'KarmaTests'
     },
@@ -64,6 +64,7 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
     autoWatch: false,
 
+    processKillTimeout: 10000,
     // CRITICAL: false so karma exits with code 0 even when tests fail.
     // This prevents Jenkins from treating test failures as build failures.
     singleRun: true,
